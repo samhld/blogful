@@ -57,6 +57,16 @@ def get_post(id):
     return render_template("render_post.html", post = post.get(id))
     
 @app.route("/post/<id>/edit")
-def edit_post(id):
+def edit_post_get(id):
+    #instantly edits post
+    post = session.query(Post).get(id)
+    return render_template("edit_post.html", post = post)
+
+@app.route("/post/<id>/edit", methods=["POST"])    
+def edit_post_post(id):
+    post = session.query(Post).get(id)
+    post.title = request.form["title"]
+    post.content = mistune.markdown(request.form["content"])
     
-    pass
+    session.commit()
+    return redirect(url_for("posts"))
