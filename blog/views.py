@@ -2,6 +2,10 @@ from flask import render_template
 import mistune
 from flask import request, redirect, url_for
 
+from flask import flash
+from flask.ext.login import login_user
+from werkzeug.security import check_password_hash
+from .models import User
 
 from blog import app
 from .database import session
@@ -70,3 +74,26 @@ def edit_post_post(id):
     
     session.commit()
     return redirect(url_for("posts"))
+    
+@app.route("/post/<id>/edit")
+def delete_post(id):
+    post = session.query(Post).get(id)
+    
+    session.delete(id)
+    session.commit()
+    
+@app.route("/login", methods=["GET"])
+def login_get():
+    return render_template("login.html")
+    
+@app.route("/login", methods=["POST"])
+def login_post():
+    email = request.form["email"]
+    password = request.form["password"]
+    user = session.query(User).filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        flash("Incorrect username or password", "danger")
+        return redirect(url_for("login_get"))
+
+    login_user(user)
+    return redirect(request.args.get('next') or url_for("posts"))
