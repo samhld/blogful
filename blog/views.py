@@ -2,6 +2,7 @@ from flask import render_template
 import mistune
 from flask import request, redirect, url_for
 
+
 from blog import app
 from .database import session
 from .models import Post
@@ -48,8 +49,14 @@ def add_post_post():
     session.commit()
     return redirect(url_for("posts"))
     
-@app.route("/post/<id>")
-def get_post():
-    return Post.id
+@app.route("/post/<id>", methods=["GET"])
+def get_post(id):
     
+    post = session.query(Post)
+    print post.get(id)
+    return render_template("render_post.html", post = post.get(id))
     
+@app.route("/post/<id>/edit")
+def edit_post(id):
+    
+    pass

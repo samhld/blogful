@@ -1,0 +1,12 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    Viewing Post
+</h1>
+
+{{ macros.render_post(post) }}
+
+{% endblock %}
