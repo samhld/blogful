@@ -74,13 +74,20 @@ def edit_post_post(id):
     
     session.commit()
     return redirect(url_for("posts"))
+
+@app.route("/post/<id>/delete")
+def delete_post_get(id):
+    #instantly edits post
+    post = session.query(Post).get(id)
+    return render_template("delete_post.html", post = post)    
     
-@app.route("/post/<id>/edit")
-def delete_post(id):
+@app.route("/post/<id>/delete", methods=["POST"])
+def delete_post_post(id):
     post = session.query(Post).get(id)
     
-    session.delete(id)
+    session.delete(post)
     session.commit()
+    return redirect(url_for("posts"))
     
 @app.route("/login", methods=["GET"])
 def login_get():
