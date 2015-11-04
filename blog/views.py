@@ -11,7 +11,8 @@ from blog import app
 from .database import session
 from .models import Post
 
-    
+from flask.ext.login import login_required
+   
 @app.route("/")
 @app.route("/page/<int:page>")
 def posts(page=1, paginate_by=10):
@@ -40,10 +41,12 @@ def posts(page=1, paginate_by=10):
     )
     
 @app.route("/post/add", methods=["GET"])
+@login_required
 def add_post_get():
     return render_template("add_post.html")
     
 @app.route("/post/add", methods=["POST"])
+@login_required
 def add_post_post():
     post = Post(
         title=request.form["title"],
@@ -104,3 +107,4 @@ def login_post():
 
     login_user(user)
     return redirect(request.args.get('next') or url_for("posts"))
+    

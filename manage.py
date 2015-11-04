@@ -5,7 +5,7 @@ from blog import app
 from blog.models import Post
 from blog.models import User
 from blog.database import session
-
+input = raw_input
 from getpass import getpass
 
 from werkzeug.security import generate_password_hash
